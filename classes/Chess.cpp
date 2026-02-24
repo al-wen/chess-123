@@ -2,6 +2,9 @@
 #include <limits>
 #include <cmath>
 
+#include "ChessSquare.h"
+#include <cctype>
+
 Chess::Chess()
 {
     _grid = new Grid(8, 8);
@@ -61,6 +64,51 @@ void Chess::FENtoBoard(const std::string& fen) {
     // 3: castling availability (KQkq or -)
     // 4: en passant target square (in algebraic notation, or -)
     // 5: halfmove clock (number of halfmoves since the last capture or pawn advance)
+
+    _grid->forEachSquare([](ChessSquare* square, int x, int y) {
+        square->setBit(nullptr);
+    });
+
+    int row = 7;
+    int col = 0;
+
+    for (char c : fen) {
+        // if extra end bit then exit
+        if (c == ' ') break;
+        // if / then next line
+        if (c == '/') {
+            row--;
+            col = 0;
+        // if number then skip columns
+        } else if (std::isdigit(c)) {
+            col += c - '0';
+        } else {
+            ChessPiece piece;
+            if (std::toupper(c) == 'R') {
+                piece = Rook;
+            } else if (std::toupper(c) == 'N') {
+                piece = Knight;
+            } else if (std::toupper(c) == 'B') {
+                piece = Bishop;
+            } else if (std::toupper(c) == 'Q') {
+                piece = Queen;
+            } else if (std::toupper(c) == 'K') {
+                piece = King;
+            } else {
+                piece = Pawn;
+            }
+
+            // if uppercase white, else black
+            Bit* bit = PieceForPlayer(std::isupper(c) ? 0 : 1, piece);
+            ChessSquare* square = _grid->getSquare(col, row);
+            bit->setPosition(square->getPosition());
+            bit->setParent(square);
+            bit->setGameTag(std::isupper(c) ? piece : (piece + 128));
+            square->setBit(bit);
+
+            col++;
+        }
+    }
 }
 
 bool Chess::actionForEmptyHolder(BitHolder &holder)

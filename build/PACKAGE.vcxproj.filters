@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\alwen\OneDrive\Desktop\Code\CMPM123\chess-123\build\CMakeFiles\22233e7fe90b60f914215c0d2b94a302\PACKAGE_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{FA41E151-C0D0-3CD1-ADA6-A121208B5C03}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
