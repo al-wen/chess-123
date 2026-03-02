@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\alwen\OneDrive\Desktop\Code\CMPM123\chess-123\out\build\Visual Studio Build Tools 2019 Release - x86\CMakeFiles\9ea6cc0e4eaabcadf70d606e5cca4e1e\PACKAGE_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{95700B6E-61C2-3642-9677-77077502CBC1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/Experimental.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/Nightly.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/Continuous.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/NightlyMemoryCheck.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/demo.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/PACKAGE.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/RUN_TESTS.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/ALL_BUILD.dir
+C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/CMakeFiles/ZERO_CHECK.dir

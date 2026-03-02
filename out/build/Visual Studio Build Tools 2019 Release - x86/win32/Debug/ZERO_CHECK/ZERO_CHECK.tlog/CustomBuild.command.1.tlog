@@ -1,0 +1,10 @@
+^C:\USERS\ALWEN\ONEDRIVE\DESKTOP\CODE\CMPM123\CHESS-123\OUT\BUILD\VISUAL STUDIO BUILD TOOLS 2019 RELEASE - X86\CMAKEFILES\9EA6CC0E4EAABCADF70D606E5CCA4E1E\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123 "-BC:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/alwen/OneDrive/Desktop/Code/CMPM123/chess-123/out/build/Visual Studio Build Tools 2019 Release - x86/tictactoe.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

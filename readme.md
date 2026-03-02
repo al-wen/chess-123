@@ -1,13 +1,12 @@
-Fork or clone your this chess project into a new GitHub repository.
+# Add setup code to your chess game
+I used the lecture code to help me with the board.
 
-Add support for FEN stringsLinks to an external site. to your game setup so that instead of the current way you are setting up your game board you are setting it up with a call similar to the following call.
+# Chess Movement
 
-FENtoBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+## Part 1:
+I used the lecture code to help with movement of the knight, king, and pawn.
+- The knight checks where it can move with a list of L shaped vectors in generateKnightMoveBitBoard.
+- The king checks where it can move with a list of adjacent and diagonals in generateKingMoveBitBoard.
+- The pawn checks where it can move by checking if it is the first step (it can move 2 squares), and then checks the forward diagonals for any occupied enemies.
 
-Your routine should be able to take just the board position portion of a FEN string, or the entire FEN string like so:
-
-FENtoBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-
-(you can ignore the end for now)
-
-This will allow you to quickly check that your castling, promotion and en passant code is working.
+These check for whether there is an occupied space and whether it is an enemy or not.
