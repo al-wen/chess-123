@@ -2,7 +2,7 @@
 #include "Bit.h"
 #include "Bitboard.h"
 #include "ChessSquare.h"
-
+#include "MagicBitboards.h"
 #include <cstdint>
 #include <limits>
 #include <cmath>
@@ -15,6 +15,7 @@ Chess::Chess()
         _knightBitboards[i] = generateKnightMoveBitBoard(i);
         _kingBitboards[i] = generateKingMoveBitBoard(i);
     }
+    initMagicBitboards(); 
 
     for (int i = 0; i < 128; i++) {_bitboardLookup[i] = 0; }
     _bitboardLookup['P'] = WHITE_PAWNS;
@@ -35,6 +36,7 @@ Chess::Chess()
 
 Chess::~Chess()
 {
+    cleanupMagicBitboards();
     delete _grid;
 }
 
@@ -72,8 +74,9 @@ void Chess::setUpBoard()
     _gameOptions.rowY = 8;
 
     _grid->initializeChessSquares(pieceSize, "boardsquare.png");
-    FENtoBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    FENtoBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     //FENtoBoard("p2k2n1/8/8/8/8/8/P2K2N1");
+    //FENtoBoard("rnbqkbnr/8/8/8/8/8/8/RNBQKBNR");
     
     _currentPlayer = WHITE;
     _moves = generateAllMoves();
@@ -148,8 +151,26 @@ bool Chess::canBitMoveFrom(Bit &bit, BitHolder &src)
     // need to implement friendly/unfriendly in bit so for now this hack
     int currentPlayer = getCurrentPlayer()->playerNumber() * 128;
     int pieceColor = bit.gameTag() & 128;
+    
     if (pieceColor == currentPlayer) return true;
     return false;
+
+    if (pieceColor != currentPlayer) return false;
+    
+    /*
+    clearBoardHighlights();
+    ChessSquare* srcSquare = (ChessSquare*)&src;
+    int fromSquareIndex = srcSquare->getSquareIndex();
+    for (const auto& move : _moves) {
+        if (move.from == fromSquareIndex) {
+            int file = move.to % 8;
+            int rank = move.to / 8;
+            ChessSquare* destSquare = _grid->getSquare(file, rank);
+            destSquare->setHighlighted(true);
+        }
+    }
+    return true;
+    */
 }
 
 bool Chess::canBitMoveFromTo(Bit &bit, BitHolder &src, BitHolder &dst)
@@ -345,6 +366,32 @@ void Chess::generatePawnMoves(std::vector<BitMove>& moves, BitboardElement pawnB
     });
 }
 
+void Chess::generateRookMoves(std::vector<BitMove>& moves, BitboardElement rookBoard, uint64_t occupancy, uint64_t self_occupancy) {
+    rookBoard.forEachBit([&](int from) {
+        BitboardElement canMoveTo(getRookAttacks(from, occupancy) & ~self_occupancy);
+        canMoveTo.forEachBit([from, &moves](int to) {
+            moves.emplace_back(from, to, Rook);
+        });
+    });
+}
+
+void Chess::generateBishopMoves(std::vector<BitMove>& moves, BitboardElement bishopBoard, uint64_t occupancy, uint64_t self_occupancy) {
+    bishopBoard.forEachBit([&](int from) {
+        BitboardElement canMoveTo(getBishopAttacks(from, occupancy) & ~self_occupancy);
+        canMoveTo.forEachBit([from, &moves](int to) {
+            moves.emplace_back(from, to, Bishop);
+        });
+    });
+}
+
+void Chess::generateQueenMoves(std::vector<BitMove>& moves, BitboardElement queenBoard, uint64_t occupancy, uint64_t self_occupancy) {
+    queenBoard.forEachBit([&](int from) {
+        BitboardElement canMoveTo(getQueenAttacks(from, occupancy) & ~self_occupancy);
+        canMoveTo.forEachBit([from, &moves](int to) {
+            moves.emplace_back(from, to, Queen);
+        });
+    });
+}
 
 std::vector<BitMove> Chess::generateAllMoves() {
     std::vector<BitMove> moves;
@@ -373,6 +420,10 @@ std::vector<BitMove> Chess::generateAllMoves() {
     generateKnightMoves(moves, _bitboards[WHITE_KNIGHTS + bitIndex], ~_bitboards[selfOccupancyIndex].getData());
     generateKingMoves(moves, _bitboards[WHITE_KING + bitIndex], ~_bitboards[selfOccupancyIndex].getData());
     generatePawnMoves(moves, _bitboards[WHITE_PAWNS + bitIndex], ~_bitboards[OCCUPANCY].getData(), _bitboards[oppOccupancyIndex].getData());
+
+    generateBishopMoves(moves, _bitboards[WHITE_BISHOPS + bitIndex], _bitboards[OCCUPANCY].getData(), _bitboards[selfOccupancyIndex].getData());
+    generateRookMoves(moves, _bitboards[WHITE_ROOKS + bitIndex], _bitboards[OCCUPANCY].getData(), _bitboards[selfOccupancyIndex].getData());
+    generateQueenMoves(moves, _bitboards[WHITE_QUEENS + bitIndex], _bitboards[OCCUPANCY].getData(), _bitboards[selfOccupancyIndex].getData());
     
     return moves;
 }
