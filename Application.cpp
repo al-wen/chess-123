@@ -57,9 +57,16 @@ namespace ClassGame {
                         game = new Othello();
                         game->setUpBoard();
                     }
-                    if (ImGui::Button("Start Chess")) {
+                    if (ImGui::Button("Start Chess (white)")) {
                         game = new Chess();
                         game->setUpBoard();
+                        game->getPlayerAt(1)->setAIPlayer(true); //player is white
+                    }
+                    if (ImGui::Button("Start Chess (black)")) {
+                        game = new Chess();
+                        game->setUpBoard();
+                        game->getPlayerAt(1)->setAIPlayer(false);
+                        game->getPlayerAt(0)->setAIPlayer(true); //player is black
                     }
                 } else {
                     ImGui::Text("Current Player Number: %d", game->getCurrentPlayer()->playerNumber());

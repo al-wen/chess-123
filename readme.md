@@ -14,3 +14,10 @@ These check for whether there is an occupied space and whether it is an enemy or
 ## Part 2:
 - I used the provided MagicBitboards.h to help with rook, bishop, and queen movement.
 - The pieces use similar logic to the previously implemented pieces, where it checks what moves are valid. 
+
+# Chess AI
+
+- The chess AI uses negamax with alpha beta pruning. The AI can run at a depth of 4 with a short delay and play decently.
+- The most challenging part of this assignment was optimizing the AI.
+- The player can choose to play as either black or white.
+- I implemented pawn promotion

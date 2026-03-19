@@ -8,6 +8,7 @@
 #include "Grid.h"
 
 #include <cstdint>
+#include <vector>
 
 constexpr int pieceSize = 80;
 constexpr int WHITE = +1;
@@ -32,6 +33,36 @@ enum AllBitBoards
     OCCUPANCY,
     EMPTY_SQUARES,
     e_numBitBoards
+};
+
+constexpr int MAX_DEPTH = 25;
+
+struct GameState {
+    char state[64];
+
+    GameState() { stackLevel = 0; }
+    static int stackLevel;
+    static int srcSquares[MAX_DEPTH];
+    static int dstSquares[MAX_DEPTH];
+    static char saveMove[MAX_DEPTH];
+
+    void pushMove(BitMove& move) {
+        srcSquares[stackLevel] = move.from;
+        dstSquares[stackLevel] = move.to;
+
+        char saveMove = state[dstSquares[stackLevel]];
+        state[dstSquares[stackLevel]] = state[srcSquares[stackLevel]];
+        state[srcSquares[stackLevel]] = '0';
+        stackLevel++;
+        assert(stackLevel < MAX_DEPTH);
+    }
+
+    void popMove() {
+        stackLevel--;
+        assert(stackLevel >= 0);
+        state[srcSquares[stackLevel]] = state[dstSquares[stackLevel]];
+        state[dstSquares[stackLevel]] = saveMove[stackLevel];
+    }
 };
 
 class Chess : public Game
@@ -60,24 +91,34 @@ public:
 
     Grid* getGrid() override { return _grid; }
 
+    bool gameHasAI() override { return true; }
+    void updateAI() override;
+
 private:
     Bit* PieceForPlayer(const int playerNumber, ChessPiece piece);
     Player* ownerAt(int x, int y) const;
     void FENtoBoard(const std::string& fen);
     char pieceNotation(int x, int y) const;
 
-    std::vector<BitMove> generateAllMoves();
+    std::vector<BitMove> generateAllMoves(std::string state, const int currentPlayer);
+    void filterOutIllegalMoves(std::vector<BitMove>& moves, std::string state, const int currentPlayer);
     BitboardElement generateKnightMoveBitBoard(int square);
     BitboardElement generateKingMoveBitBoard(int square);
 
     void generateKnightMoves(std::vector<BitMove>& moves, BitboardElement knightBoard, uint64_t occupancy);
     void generateKingMoves(std::vector<BitMove>& moves, BitboardElement kingBoard, uint64_t occupancy);
-    void generatePawnMoves(std::vector<BitMove>& moves, BitboardElement pawnBoard, uint64_t occupancy, uint64_t opp_occupancy);
+    void generatePawnMoves(std::vector<BitMove>& moves, BitboardElement pawnBoard, uint64_t occupancy, uint64_t opp_occupancy, int currentPlayer);
     void generateBishopMoves(std::vector<BitMove>& moves, BitboardElement bishopBoard, uint64_t occupancy, uint64_t opp_occupancy);
     void generateRookMoves(std::vector<BitMove>& moves, BitboardElement rookBoard, uint64_t occupancy, uint64_t opp_occupancy);
     void generateQueenMoves(std::vector<BitMove>& moves, BitboardElement queenBoard, uint64_t occupancy, uint64_t opp_occupancy);
 
+    bool isKingInCheck(const std::string& state, int currentPlayer) const;
+
+    int negaMax(char* state, int depth, int alpha, int beta, int playerColor);
+    int Evaluate(const std::string& state);
+
     int _currentPlayer;
+    int _countState;
 
     Grid* _grid;
 
